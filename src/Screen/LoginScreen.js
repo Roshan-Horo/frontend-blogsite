@@ -1,84 +1,70 @@
-import React from 'react'
-import  {  Form, Input, Button, Checkbox  } from 'antd';
-const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
-  
-  const Demo = () => {
-    const onFinish = (values) => {
-      console.log('Success:', values);
-    };
-  
-    const onFinishFailed = (errorInfo) => {
-      console.log('Failed:', errorInfo);
-    };
-}
+import React, {useState, useEffect} from 'react'
+import { Link } from 'react-router-dom'
+import { Form, Button, Row, Col} from 'react-bootstrap'
+import { useDispatch, useSelector} from 'react-redux'
 
-const LoginScreen = () => {
+import { login } from '../actions/userActions'
+import FormContainer from '../components/FormContainer'
+
+
+const LoginScreen = ({location, history}) => {
+    const [email,setEmail] = useState('john@example.com')
+    const [password, setPassword] = useState('123456')
+
+    const dispatch = useDispatch()
+
+    const userLogin = useSelector(state => state.userLogin)
+    const { loading, error, userInfo} = userLogin
+
+    const redirect = location.search ? location.search.split('=')[1] : '/'
+    
+    useEffect( () => {
+      if(userInfo){
+        history.push(redirect)
+      }
+    },[history,userInfo, redirect])
+
+    const submitHandler = (e) => {
+      e.preventDefault()
+      dispatch(login(email,password))
+    }
+
     return (
-        <React.Fragment>
-           <h1>Sign In</h1> 
-
-           <Form
-      {...layout}
-      name="basic"
-      initialValues={{
-        remember: true,
-      }}
-   
-    >
+      <FormContainer>
       
+       <h1>Sign In</h1>
+       
+       <Form onSubmit={submitHandler} >
+        <Form.Group controlId='email'>
+         <Form.Label>Email Address</Form.Label>
+         <Form.Control
+          type='email'
+          placeholder='Enter Email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          ></Form.Control>
+       </Form.Group>
 
-      <Form.Item
-        name="email"
-        label="E-mail"
-        rules={[
-          {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
-            required: true,
-            message: 'Please input your E-mail!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+       <Form.Group controlId='password'>
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+         type='password'
+         placeholder='Enter Password'
+         value={password}
+         onChange={(e) => setPassword(e.target.value)}
+         ></Form.Control>
+      </Form.Group>
 
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
+      <Button type='submit' variant='primary'>Sign In</Button>
 
-     
+       </Form>
 
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
-        </React.Fragment>
+       <Row className="py-3">
+        <Col>
+         New Customer? <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} >Register</Link>
+        </Col>
+       </Row>
+   </FormContainer>
     )
 }
 

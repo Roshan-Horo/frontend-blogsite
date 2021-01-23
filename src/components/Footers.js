@@ -1,13 +1,12 @@
 import React from 'react'
-import {  Layout } from 'antd';
-const { Footer } = Layout;
+
 
 const Footers = () => {
     return (
         <React.Fragment>
-        <Footer style={{ textAlign: 'center' }}>
+        <h2 style={{ textAlign: 'center' }}>
         Blogsite &copy; 2021 
-        </Footer>
+        </h2>
         </React.Fragment>
     )
 }

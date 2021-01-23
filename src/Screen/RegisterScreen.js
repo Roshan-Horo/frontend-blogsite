@@ -1,23 +1,9 @@
 import React,{useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
+import { Form, Button, Row, Col} from 'react-bootstrap'
+import FormContainer from '../components/FormContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
-
-import  {  Form, Input, Button, Checkbox  } from 'antd';
-const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
-  };
 
 
 const RegisterScreen = (location,history) => {
@@ -50,84 +36,63 @@ const RegisterScreen = (location,history) => {
     }
 
     return (
-        <React.Fragment>
-           <h1>Sign Up</h1> 
+      <FormContainer>
+      
+      <h1>Sign Up</h1>
+      
+      <Form onSubmit={submitHandler} >
+       <Form.Group controlId='name'>
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+         type='text'
+         placeholder='Enter Name'
+         value={name}
+         onChange={(e) => {
+          console.log(e.target.value) 
+          setName(e.target.value)}}
+         ></Form.Control>
+       </Form.Group>
 
-           <Form
-      {...layout}
-      name="basic"
-      initialValues={{
-        remember: true,
-      }}
-   
-    >
-      <Form.Item
-        label="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Name!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+       <Form.Group controlId='email'>
+        <Form.Label>Email Address</Form.Label>
+        <Form.Control
+         type='email'
+         placeholder='Enter Email'
+         value={email}
+         onChange={(e) => setEmail(e.target.value)}
+         ></Form.Control>
+      </Form.Group>
 
-      <Form.Item
-        label="E-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        rules={[
-          {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
-            required: true,
-            message: 'Please input your E-mail!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Password"
+      <Form.Group controlId='password'>
+       <Form.Label>Password</Form.Label>
+       <Form.Control
+        type='password'
+        placeholder='Enter Password'
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
+        ></Form.Control>
+     </Form.Group>
 
-      <Form.Item
-      label="Confirm Password"
-      value={confirmPassword}
+     <Form.Group controlId='confirmPassword'>
+       <Form.Label>Confirm Password</Form.Label>
+       <Form.Control
+        type='password'
+        placeholder='Enter Password Again'
+        value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-      rules={[
-        {
-          required: true,
-          message: 'Please input your password!',
-        },
-      ]}
-    >
-      <Input.Password />
-    </Form.Item>
+        ></Form.Control>
+     </Form.Group>
 
-      <Form.Item {...tailLayout}>
-        <Button type="submit" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
-        </React.Fragment>
+     <Button type='submit' variant='primary'>Register</Button>
+
+      </Form>
+
+      <Row className="py-3">
+       <Col>
+        Have an Account? <Link to={redirect ? `/login?redirect=${redirect}` : '/login'} >Login</Link>
+       </Col>
+      </Row>
+  </FormContainer>
     )
 }
 
