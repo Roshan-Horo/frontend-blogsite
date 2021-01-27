@@ -1,6 +1,5 @@
 import * as actions from '../constants/userConstants'
 import axios from 'axios'
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider'
 
 export const login = (email, password) => async (dispatch) => {
     try {

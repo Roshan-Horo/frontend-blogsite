@@ -4,16 +4,23 @@ import { Card,Button } from 'react-bootstrap'
 
 const Post = ({post}) => {
     return (
-        <Card style={{ width: '18rem' }}>
-  <Card.Img variant="top" src="https://picsum.photos/200/100" />
-  <Card.Body>
-    <Card.Title>{post.title}</Card.Title>
-    <Card.Text>
-      {post.description}
-    </Card.Text>
-    <Button variant="primary">Show More</Button>
-  </Card.Body>
-</Card>
+        <Card  className="my-3 p-3 rounded">
+        <Link to={`/posts/${post._id}`}>
+             <Card.Img variant="top" src={post.image} />
+        </Link>
+        <Card.Body>
+        <Link to={`/posts/${post._id}`}>
+         <Card.Title as="div"><strong>{post.title}</strong></Card.Title>
+         </Link>
+         <Card.Text as="div" className="my-3">
+          {post.category}
+         </Card.Text>
+         <Link to={`/posts/${post._id}`}>
+          <Button variant="primary">Show More</Button>
+         </Link>
+
+         </Card.Body>
+        </Card>
     )
 }
 

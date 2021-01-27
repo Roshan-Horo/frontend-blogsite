@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../actions/userActions'
 
 
-const RegisterScreen = (location,history) => {
-    const [name,setName] = useState('')
-    const [email,setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+const RegisterScreen = ({location,history}) => {
+    const [name,setName] = useState('test')
+    const [email,setEmail] = useState('test@example.com')
+    const [password, setPassword] = useState('123456')
+    const [confirmPassword, setConfirmPassword] = useState('123456')
 
     const dispatch = useDispatch()
 
@@ -23,8 +23,8 @@ const RegisterScreen = (location,history) => {
       if(userInfo){
         history.push(redirect)
       }
-      // eslint-disable-next-line
-    },[history,userInfo, redirect])
+      
+    },[history,userInfo,redirect])
 
     const submitHandler = (e) => {
       e.preventDefault()

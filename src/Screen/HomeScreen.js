@@ -1,30 +1,35 @@
-import React from 'react'
+import React,{useEffect} from 'react'
+import { useDispatch, useSelector} from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Row , Col} from 'react-bootstrap'
 import Post from '../components/Post'
+import {listPosts} from '../actions/postActions'
 
 
 const HomeScreen = () => {
+    const dispatch = useDispatch()
+    const postList = useSelector( state => state.postList)
+    const { loading,error,posts } = postList 
+    
+    useEffect( () => {
+        dispatch(listPosts())
+    },[dispatch])
 
-    const posts = ["1","2","3","4","5","6","7","8","9","10"]
     return (
         <React.Fragment>
          <h1>Treanding Posts</h1>
 
-         <Row>
+         {loading ? 'loading' : <Row>
           {posts.map(post => (
             
-              <Col  sm={12} md={6} lg={4} xl={3}>
-                <Post post={post} key={post._id}/>
-
+              <Col  key={post._id} sm={12} md={6} lg={4} xl={3}>
+                <Post post={post}/>
               </Col>
           ))}
-         </Row>
-        
-         
-        </React.Fragment>
+         </Row>}
 
-        
+        </React.Fragment>
+ 
     )
 
 
