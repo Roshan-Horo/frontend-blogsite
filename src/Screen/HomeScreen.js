@@ -1,6 +1,5 @@
 import React,{useEffect} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Row , Col} from 'react-bootstrap'
 import Post from '../components/Post'
 import {listPosts} from '../actions/postActions'
@@ -9,11 +8,15 @@ import {listPosts} from '../actions/postActions'
 const HomeScreen = () => {
     const dispatch = useDispatch()
     const postList = useSelector( state => state.postList)
-    const { loading,error,posts } = postList 
+    const { loading,posts } = postList 
+    
+    const postDelete = useSelector(state => state.postDelete)
+    const { success: successDelete} = postDelete
+
     
     useEffect( () => {
         dispatch(listPosts())
-    },[dispatch])
+    },[dispatch,successDelete])
 
     return (
         <React.Fragment>

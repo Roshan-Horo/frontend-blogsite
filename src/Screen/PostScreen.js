@@ -1,17 +1,25 @@
-import React,{useState, useEffect} from 'react'
+import React,{ useEffect} from 'react'
 import { Row,Col, Card, Image, ListGroup, Button } from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
-import { listPostDetails } from '../actions/postActions'
+import { listPostDetails, deletePost } from '../actions/postActions'
 
-const PostScreen = ({match}) => {
+const PostScreen = ({match,history}) => {
     
     const dispatch = useDispatch()
     const postDetails = useSelector( state => state.postDetails)
     const { loading, post} = postDetails
 
+
     useEffect( () => {
         dispatch(listPostDetails(match.params.id))
-    },[dispatch,match])
+    },[dispatch,match,])
+
+    const deleteHandler = (id) => {
+        if(window.confirm('Are you sure')){
+            dispatch(deletePost(id))
+            history.push("/")
+        }
+    }
 
     return (
         <React.Fragment>
@@ -56,6 +64,22 @@ const PostScreen = ({match}) => {
              <Row>
               <Col>Last Updated:</Col>
               <Col><strong>{post.updatedAt}</strong></Col>
+             </Row>
+
+            </ListGroup.Item>
+
+            <ListGroup.Item>
+             <Row>
+              <Col>Delete:</Col>
+              <Col>
+              <Button 
+              variant='danger' 
+              className='btn-sm' 
+              onClick={() => deleteHandler(post._id)}
+           >
+            <i className='fas fa-trash' ></i>
+           </Button>
+              </Col>
              </Row>
 
             </ListGroup.Item>

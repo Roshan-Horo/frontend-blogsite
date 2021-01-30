@@ -2,12 +2,13 @@ import React,{useEffect} from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { Container, Nav, Navbar, NavDropdown,Button} from 'react-bootstrap';
 import { LinkContainer} from 'react-router-bootstrap'
-import { Route } from 'react-router-dom'
+import { Route, useHistory } from 'react-router-dom'
 import { logout } from '../actions/userActions'
 import { createPost} from '../actions/postActions'
 import { POST_CREATE_RESET} from '../constants/postConstants'
 
-const Headers = ({history,match,location}) => {
+const Headers = ({match,location}) => {
+    const history = useHistory()
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
@@ -26,7 +27,11 @@ const Headers = ({history,match,location}) => {
     }
 
     const createPostHandler = () => {
+      if(userInfo){
         dispatch(createPost())
+      }else{
+        history.push(`/login`)
+      }
     } 
     return (
       <header>

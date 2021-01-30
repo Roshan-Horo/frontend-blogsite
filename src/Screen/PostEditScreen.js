@@ -2,13 +2,13 @@ import React, {useState, useEffect} from 'react'
 import { Form, Button} from 'react-bootstrap'
 import { useDispatch, useSelector} from 'react-redux'
 import axios from 'axios'
-import { listPostDetails, updatePost} from '../actions/postActions'
+import { listPostDetails, updatePost, deletePost} from '../actions/postActions'
 import FormContainer from '../components/FormContainer'
-import { POST_UPDATE_RESET } from '../constants/postConstants'
+import { useHistory } from 'react-router-dom'
 
-const PostEditScreen = ({match, history}) => {
+const PostEditScreen = ({match}) => {
     const postId = match.params.id
-
+    const history = useHistory()
     const [title, setTitle] = useState('')
     const [image, setImage] = useState('')
     const [category, setCategory] = useState('')
@@ -17,21 +17,24 @@ const PostEditScreen = ({match, history}) => {
 
     const dispatch = useDispatch()
 
-    const postDetails = useSelector(state => state.postDetails)
-    const { loading, error, post} = postDetails
+    const postCreate = useSelector(state => state.postCreate)
+    const { loading, error, post} = postCreate
+
+    const postDelete = useSelector(state => state.postDelete)
+    const {  success: successDelete} = postDelete
 
     const postUpdate = useSelector(state => state.postUpdate)
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate} = postUpdate
+    const { success: successUpdate} = postUpdate
 
     
     useEffect( () => {
       console.log(postId)
       if(successUpdate){
-        dispatch({type: POST_UPDATE_RESET})
         history.push('/')
       }else{
-        if(post.title){
+        if(!post.title || post._id !== postId){
           console.log(post.title)
+          dispatch(listPostDetails(postId))
         }else{
           setTitle(post.title)
           setImage(post.image)
@@ -39,7 +42,7 @@ const PostEditScreen = ({match, history}) => {
           setDescription(post.description)
         }
       }
-    }, [dispatch,post,postId,history,successUpdate])
+    }, [dispatch,post,postId,history,successUpdate,successDelete])
 
     const uploadFileHandler = async (e) => {
       const file = e.target.files[0]
@@ -57,6 +60,7 @@ const PostEditScreen = ({match, history}) => {
         const { data } = await axios.post('/api/upload',formData, config)
 
         setImage(data)
+        console.log(data)
         setUploading(false)
       } catch (error) {
         console.log(error)
@@ -66,6 +70,7 @@ const PostEditScreen = ({match, history}) => {
 
     const submitHandler = (e) => {
       e.preventDefault()
+      console.log(successUpdate)
       dispatch(updatePost({
         _id: postId,
         title,
@@ -74,6 +79,13 @@ const PostEditScreen = ({match, history}) => {
         description
       }))
     }
+
+    const deleteHandler = (id) => {
+      if(window.confirm('Are you sure')){
+          dispatch(deletePost(id))
+          history.push("/")
+      }
+  }
 
     return (
         <React.Fragment>
@@ -132,6 +144,13 @@ const PostEditScreen = ({match, history}) => {
                  </Form>)
           }
     </FormContainer>
+    <Button 
+    variant='danger' 
+    className='btn-sm' 
+    onClick={() => deleteHandler(postId)}
+ >
+  <i className='fas fa-trash' ></i>
+ </Button>
         </React.Fragment>
     )
 }

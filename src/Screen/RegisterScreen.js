@@ -15,7 +15,7 @@ const RegisterScreen = ({location,history}) => {
     const dispatch = useDispatch()
 
     const userRegister = useSelector(state => state.userRegister)
-    const { loading, error, userInfo} = userRegister
+    const {  userInfo} = userRegister
 
     const redirect = location.search ? location.search.split('=')[1] : '/'
 
